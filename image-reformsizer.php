@@ -11,6 +11,8 @@ License: Apache License 2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 */
 
+include_once __DIR__ . "/functions.php";
+
 register_activation_hook(__FILE__, 'activate_image_reformsizer');
 
 function activate_image_reformsizer()
