@@ -45,7 +45,7 @@ function activate_image_reformsizer()
 			irfs_exec_and_handle("chmod u+x " . __DIR__ . "/bin/image-resizer");
 			break;
 		default:
-			wp_die("Error: your system not supported yet ($system). Please contact me here: <a href=\"https://github.com/Raistah/image-reformsizer\">https://github.com/Raistah/image-reformsizer</a>");
+			wp_die("Image Reformsizer (Error: `your system not supported yet ($system). Please contact me here: <a href=\"https://github.com/Raistah/image-reformsizer\">https://github.com/Raistah/image-reformsizer</a>`)\n");
 			break;
 	}
 
@@ -56,11 +56,11 @@ function irfs_copy_bin(string $source, string $dist): void
 {
 	if (file_exists($source)) {
 		if (!copy($source, $dist)) {
-			wp_die("Error: Failed to copy the file($source to $dist).");
+			wp_die("Image Reformsizer (Error: `Failed to copy the file($source to $dist).`)\n");
 			echo "Error: Failed to copy the file.";
 		}
 	} else {
-		wp_die("Error: Source file does not exist. $source");
+		wp_die("Image Reformsizer (Error: `Source file does not exist. $source`)\n");
 	}
 }
 
@@ -71,7 +71,7 @@ function irfs_exec_and_handle($command): string {
 	$result = implode("\n", $output);
 
 	if($result_code != 0) {
-		wp_die("Error: `" . $result . "`");
+		wp_die("Image Reformsizer (" . $result . ")\n");
 	}
 
 	return $result;
