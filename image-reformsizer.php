@@ -76,3 +76,33 @@ function irfs_exec_and_handle($command): string {
 
 	return $result;
 }
+
+add_shortcode( 'irfs_picture', 'irfs_shortcode' );
+function irfs_shortcode( $atts ) {
+	$atts = shortcode_atts( array(
+		'image' => null,
+		'formats' => 'png,webp',
+		'targets' => '100,100,c,c|150,150,c,c,(min-width:400px)',
+		'id' => null,
+		'alt' => null,
+		'picture_class' => null,
+		'img_class' => null,
+	), $atts, 'irfs_picture' );
+
+	$formats = explode(',', $atts['formats']);
+	$targets = explode('|', $atts['targets']);
+
+	if ($atts['image'] != null) {
+		return irfs_get_html(
+			intval($atts['image']),
+			$formats,
+			$targets,
+			$atts['id'],
+			$atts['alt'],
+			$atts['picture_class'],
+			$atts['img_class'],
+		);
+	}
+
+	return "Image Reformsizer (Error: `image not provided`)\n";
+}
