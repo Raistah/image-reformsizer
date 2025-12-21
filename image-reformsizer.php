@@ -5,10 +5,10 @@ Plugin URI: https://github.com/Raistah/image-reformsizer
 Description: Allows you generate specific sources of your image including conversion to other image formats
 Version: 1.0.0
 Requires PHP: 8.2
-Author: Your Name
+Author: Raistah
 Author URI: https://github.com/Raistah
-License: Apache License 2.0
-License URI: https://www.apache.org/licenses/LICENSE-2.0
+License: GPLv2
+License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
 */
 
 include_once __DIR__ . "/functions.php";
@@ -87,7 +87,10 @@ function irfs_shortcode( $atts ) {
 		'alt' => null,
 		'picture_class' => null,
 		'img_class' => null,
+		'extra_atts' => null
 	), $atts, 'irfs_picture' );
+
+	var_dump($atts);
 
 	$formats = explode(',', $atts['formats']);
 	$targets = explode('|', $atts['targets']);
