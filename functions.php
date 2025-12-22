@@ -1,10 +1,10 @@
 <?php
 if (!defined("IRFS_URL_START")) {
-	define("IRFS_URL_START", "/");
+	define("IRFS_URL_START", "/wp-content/plugins/image-reformsizer");
 }
 
-if (!defined("IRFS_OUTPUT_DIR")) {
-	define("IRFS_OUTPUT_DIR", "./wp-content/plugins/image-reformsizer/output");
+if (!defined("IRFS_WORKING_DIR")) {
+	define("IRFS_WORKING_DIR", __DIR__ . "/");
 }
 
 if (!function_exists('irfs_get_array')) {
@@ -47,11 +47,11 @@ if (!function_exists('irfs_get_array')) {
 		}
 
 		$url_start_string = " -u " . IRFS_URL_START;
-		$output_dir_string = " -o " . IRFS_OUTPUT_DIR;
+		$output_dir_string = " -o " . IRFS_WORKING_DIR;
 
 		$result = irfs_exec_and_handle(
-			__DIR__ . "/bin/image-resizer -d " .
-				__DIR__ . "/data.db to-vec " .
+			__DIR__ . "/bin/image-resizer -w " .
+				IRFS_WORKING_DIR . " " .
 				$image .
 				$url_start_string .
 				$output_dir_string .
@@ -72,6 +72,7 @@ if (!function_exists('irfs_get_html')) {
 	 * @param string|null $alt alt text of image
 	 * @param string|null $picture_class classes of picture tag
 	 * @param string|null $img_class classes of img tag
+	 * @param string|null $extra_atts extra attribures to add to img tag (use "" inside string)
 	 * @return array
 	 */
 	function irfs_get_html(
@@ -82,6 +83,7 @@ if (!function_exists('irfs_get_html')) {
 		string|null $alt = null,
 		string|null $picture_class = null,
 		string|null $img_class = null,
+		string|null $extra_atts = null,
 	): string {
 		if (gettype($image) == 'integer') {
 			$image = get_attached_file($image);
@@ -116,25 +118,26 @@ if (!function_exists('irfs_get_html')) {
 		}
 
 		$url_start_string = " -u " . IRFS_URL_START;
-		$output_dir_string = " -o " . IRFS_OUTPUT_DIR;
 
 		$id_string = $id != null ? ' -I "' . $id . '"' : "";
 		$alt_string = $alt != null ? ' -a "' . $alt . '"' : "";
 		$picture_class_string = $picture_class != null ? ' -p "' . $picture_class . '"' : "";
 		$img_class_string = $img_class != null ? ' -i "' . $img_class . '"' : "";
+		$extra_atts_string = $extra_atts != null ? " -e '" . str_replace('"', '', $extra_atts) . "'" : "";
 
 		return irfs_exec_and_handle(
-			__DIR__ . "/bin/image-resizer -d " .
-				__DIR__ . "/data.db to-html " .
+			__DIR__ . "/bin/image-resizer -w " .
+				IRFS_WORKING_DIR .
+				" to-html " .
 				$image .
 				$url_start_string .
-				$output_dir_string .
 				$id_string .
 				$alt_string .
 				$picture_class_string .
 				$img_class_string .
 				$formats_string .
-				$targets_string
+				$targets_string .
+				$extra_atts_string
 		);
 	}
 }
@@ -156,10 +159,10 @@ if (! function_exists('irfs_clear_cache')) {
 	function irfs_clear_cache()
 	{
 		$files = [
-			__DIR__ . "/data.db",
-			__DIR__ . "/data.db-shm",
-			__DIR__ . "/data.db-wal",
-			IRFS_OUTPUT_DIR,
+			IRFS_WORKING_DIR . "/data.db",
+			IRFS_WORKING_DIR . "/data.db-shm",
+			IRFS_WORKING_DIR . "/data.db-wal",
+			IRFS_WORKING_DIR . "/sources",
 		];
 
 		foreach ($files as $file) {
@@ -172,7 +175,7 @@ if (! function_exists('irfs_clear_cache')) {
 			}
 		}
 
-		irfs_exec_and_handle(__DIR__ . "/bin/image-resizer -d " . __DIR__ . "/data.db install");
+		irfs_exec_and_handle(__DIR__ . "/bin/image-resizer -w " . IRFS_WORKING_DIR . " install");
 	}
 }
 

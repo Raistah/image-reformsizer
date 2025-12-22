@@ -49,7 +49,7 @@ function activate_image_reformsizer()
 			break;
 	}
 
-	irfs_exec_and_handle(__DIR__ . "/bin/image-resizer -d " . __DIR__ . "/data.db install");
+	irfs_exec_and_handle(__DIR__ . "/bin/image-resizer -w " . __DIR__ . "/ install");
 }
 
 function irfs_copy_bin(string $source, string $dist): void
