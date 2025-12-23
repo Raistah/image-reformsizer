@@ -90,8 +90,6 @@ function irfs_shortcode( $atts ) {
 		'extra_atts' => null
 	), $atts, 'irfs_picture' );
 
-	var_dump($atts);
-
 	$formats = explode(',', $atts['formats']);
 	$targets = explode('|', $atts['targets']);
 

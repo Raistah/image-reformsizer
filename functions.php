@@ -88,19 +88,19 @@ if (!function_exists('irfs_get_html')) {
 		if (gettype($image) == 'integer') {
 			$image = get_attached_file($image);
 			if ($image == false) {
-				irfs_write_log("Image Reformsizer (Error: `: file not found`)\n");
+				irfs_write_log("Image Reformsizer (Error: `file not found`)\n");
 				return "";
 			}
 		}
 
 		if (count($formats) == 0) {
-			irfs_write_log("Image Reformsizer (Error: `: there is no formats specified`)\n");
+			irfs_write_log("Image Reformsizer (Error: `there is no formats specified`)\n");
 			return "";
 		}
 		$formats_string = " -f " . implode(" ", $formats);
 
 		if (count($targets) == 0) {
-			irfs_write_log("Image Reformsizer (Error: `: there is no targets specified`)\n");
+			irfs_write_log("Image Reformsizer (Error: `there is no targets specified`)\n");
 			return "";
 		}
 		$targets_string = " -t";
