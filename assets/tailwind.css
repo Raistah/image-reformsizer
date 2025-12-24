@@ -1,0 +1,6 @@
+@layer theme, base, components, utilities;
+@import "tailwindcss";
+
+@source "../";
+@source not "../dist/";
+@source not "../assets/";

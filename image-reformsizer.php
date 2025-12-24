@@ -10,6 +10,14 @@ Author URI: https://github.com/Raistah
 License: GPLv2
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
 */
+if (!defined("IRFS_PLUGIN_ROOT")) {
+	if (defined('ABSPATH')) {
+		define("IRFS_PLUGIN_ROOT", str_replace(ABSPATH, '/', __DIR__));
+	} else {
+		define("IRFS_PLUGIN_ROOT", "/wp-content/plugins/image-reformsizer");
+	}
+}
+
 require_once __DIR__ . "/functions/mod.php";
 
 if (!defined("IRFS_URL_START")) {
