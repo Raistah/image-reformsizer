@@ -10,8 +10,15 @@ Author URI: https://github.com/Raistah
 License: GPLv2
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
 */
+require_once __DIR__ . "/functions/mod.php";
 
-include_once __DIR__ . "/functions.php";
+if (!defined("IRFS_URL_START")) {
+	define("IRFS_URL_START", "/wp-content/plugins/image-reformsizer");
+}
+
+if (!defined("IRFS_WORKING_DIR")) {
+	define("IRFS_WORKING_DIR", __DIR__ . "/");
+}
 
 register_activation_hook(__FILE__, 'activate_image_reformsizer');
 
@@ -64,22 +71,24 @@ function irfs_copy_bin(string $source, string $dist): void
 	}
 }
 
-function irfs_exec_and_handle($command): string {
+function irfs_exec_and_handle($command): string
+{
 	$output = [];
 	$result_code = 0;
 	exec($command . " 2>&1", $output, $result_code);
 	$result = implode("\n", $output);
 
-	if($result_code != 0) {
+	if ($result_code != 0) {
 		wp_die("Image Reformsizer (" . $result . ")\n");
 	}
 
 	return $result;
 }
 
-add_shortcode( 'irfs_picture', 'irfs_shortcode' );
-function irfs_shortcode( $atts ) {
-	$atts = shortcode_atts( array(
+add_shortcode('irfs_picture', 'irfs_shortcode');
+function irfs_shortcode($atts)
+{
+	$atts = shortcode_atts(array(
 		'image' => null,
 		'formats' => 'png,webp',
 		'targets' => '100,100,c,c|150,150,c,c,(min-width:400px)',
@@ -88,7 +97,7 @@ function irfs_shortcode( $atts ) {
 		'picture_class' => null,
 		'img_class' => null,
 		'extra_atts' => null
-	), $atts, 'irfs_picture' );
+	), $atts, 'irfs_picture');
 
 	$formats = explode(',', $atts['formats']);
 	$targets = explode('|', $atts['targets']);
@@ -106,4 +115,16 @@ function irfs_shortcode( $atts ) {
 	}
 
 	return "Image Reformsizer (Error: `image not provided`)\n";
+}
+
+add_action('admin_menu', 'my_custom_admin_menu');
+function my_custom_admin_menu()
+{
+	add_management_page(
+		'Image Reformsizer',
+		'Image Reformsizer',
+		'manage_options',
+		'image-reformsizer',
+		'irfs_admin_panel_page'
+	);
 }
