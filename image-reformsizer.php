@@ -11,10 +11,14 @@ License: GPLv2
 License URI: https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
 */
 if (!defined("IRFS_PLUGIN_ROOT")) {
+	define("IRFS_PLUGIN_ROOT", __DIR__);
+}
+
+if (!defined("IRFS_PLUGIN_ROOT_REL")) {
 	if (defined('ABSPATH')) {
-		define("IRFS_PLUGIN_ROOT", str_replace(ABSPATH, '/', __DIR__));
+		define("IRFS_PLUGIN_ROOT_REL", str_replace(ABSPATH, '/', __DIR__));
 	} else {
-		define("IRFS_PLUGIN_ROOT", "/wp-content/plugins/image-reformsizer");
+		define("IRFS_PLUGIN_ROOT_REL", "/wp-content/plugins/image-reformsizer");
 	}
 }
 

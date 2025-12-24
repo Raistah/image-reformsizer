@@ -39,14 +39,13 @@ if (!function_exists('irfs_get_array')) {
 		}
 
 		$url_start_string = " -u " . IRFS_URL_START;
-		$output_dir_string = " -o " . IRFS_WORKING_DIR;
 
 		$result = irfs_exec_and_handle(
-			__DIR__ . "/bin/image-resizer -w " .
-				IRFS_WORKING_DIR . " " .
+			IRFS_PLUGIN_ROOT . "/bin/image-resizer -w " .
+				IRFS_WORKING_DIR .
+				" to-vec " .
 				$image .
 				$url_start_string .
-				$output_dir_string .
 				$formats_string .
 				$targets_string
 		);

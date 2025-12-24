@@ -1,8 +1,8 @@
 <?php
 function irfs_admin_panel_page()
 {
-	wp_enqueue_style('irfs-styles', IRFS_PLUGIN_ROOT . '/dist/style.css', array(), "0.1.0", false);
-	wp_enqueue_script('irfs-script', IRFS_PLUGIN_ROOT . '/dist/main.js', array(), "0.1.0", false);
+	wp_enqueue_style('irfs-styles', IRFS_PLUGIN_ROOT_REL . '/dist/style.css', array(), "0.1.0", false);
+	wp_enqueue_script('irfs-script', IRFS_PLUGIN_ROOT_REL . '/dist/main.js', array(), "0.1.0", false);
 ?>
 	<div class="irfs-base">
 		<div>
