@@ -19,6 +19,9 @@
 
       packages = [
 				pkgs.nodejs_24
+				pkgs.vtsls
+			  pkgs.nodePackages.prettier
+			  pkgs.nodePackages.eslint_d
       ];
     };
   };

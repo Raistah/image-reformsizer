@@ -1,0 +1,16 @@
+{
+	"languages": {
+    "JavaScript": {
+    	"tab_size": 4,
+      "language_servers": ["vtsls", "!typescript-language-server"],
+    },
+  },
+  "lsp": {
+    "vtsls": {
+      "binary": {
+        "path": "vtsls",
+        "arguments": ["--stdio"]
+      }
+    }
+  }
+}
