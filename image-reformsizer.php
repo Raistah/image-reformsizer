@@ -23,6 +23,7 @@ if (!defined("IRFS_PLUGIN_ROOT_REL")) {
 }
 
 require_once __DIR__ . "/functions/mod.php";
+require_once __DIR__ . "/api/mod.php";
 
 if (!defined("IRFS_URL_START")) {
 	define("IRFS_URL_START", "/wp-content/plugins/image-reformsizer");
@@ -139,4 +140,16 @@ function my_custom_admin_menu()
 		'image-reformsizer',
 		'irfs_admin_panel_page'
 	);
+}
+
+add_action( 'rest_api_init', function() {
+    register_rest_route( 'image-reformsizer/api', '/clear-cache/', array(
+        'methods' => 'GET',
+        'callback' =>  'irfs_api_clear_cache',
+        'permission_callback' => 'prefix_admin_permission_check'
+    ));
+});
+
+function prefix_admin_permission_check() {
+    return current_user_can( 'manage_options' );
 }
