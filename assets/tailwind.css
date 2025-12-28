@@ -4,3 +4,4 @@
 @source "../";
 @source not "../dist/";
 @source not "../assets/";
+@source not "../blocks/";

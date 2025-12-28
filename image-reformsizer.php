@@ -142,14 +142,27 @@ function my_custom_admin_menu()
 	);
 }
 
-add_action( 'rest_api_init', function() {
-    register_rest_route( 'image-reformsizer/api', '/clear-cache/', array(
-        'methods' => 'GET',
-        'callback' =>  'irfs_api_clear_cache',
-        'permission_callback' => 'prefix_admin_permission_check'
-    ));
+add_action('rest_api_init', function () {
+	register_rest_route('image-reformsizer/api', '/clear-cache/', array(
+		'methods' => 'GET',
+		'callback' =>  'irfs_api_clear_cache',
+		'permission_callback' => 'prefix_admin_permission_check'
+	));
+
+	register_rest_route('image-reformsizer/api', '/get-html/', array(
+		'methods' => 'POST',
+		'callback' =>  'irfs_api_get_html',
+		'permission_callback' => 'prefix_admin_permission_check'
+	));
 });
 
-function prefix_admin_permission_check() {
-    return current_user_can( 'manage_options' );
+function prefix_admin_permission_check()
+{
+	return current_user_can('manage_options');
 }
+
+function irfs_register_block()
+{
+	register_block_type(__DIR__ . '/blocks/build/picture-block');
+}
+add_action('init', 'irfs_register_block');

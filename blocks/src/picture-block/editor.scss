@@ -1,0 +1,64 @@
+.irfs {
+	padding: 0 10px;
+
+	.image-selector {
+		margin-bottom: 20px;
+	}
+
+	.label {
+		font-size: 11px;
+		font-weight: 500;
+		line-height: 1.4;
+		text-transform: uppercase;
+		display: block;
+		margin-bottom: calc(8px);
+		padding: 0px;
+	}
+
+	.formats-col {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 10px;
+	}
+
+	.formats {
+		.components-base-control__field {
+			margin-bottom: 12px;
+		}
+	}
+
+	.targets {
+		margin-bottom: 20px;
+
+		.targets-list {
+			display: flex;
+			flex-direction: column;
+			margin-bottom: 20px;
+
+			.target {
+				padding-block: 10px;
+				border-bottom: 1px solid black;
+
+				.components-button {
+					margin-bottom: 10px;
+				}
+			}
+		}
+	}
+}
+
+.wp-block-irfs-picture-block {
+	.preview {
+		width: 100%;
+
+		picture {
+			width: 100%;
+			height: auto;
+
+			img {
+				width: 100%;
+				height: auto;
+			}
+		}
+	}
+}
