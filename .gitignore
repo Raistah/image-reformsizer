@@ -20,3 +20,5 @@ dist/
 .vscode/*
 !.vscode/extensions.json
 .idea
+
+bin_handle.php

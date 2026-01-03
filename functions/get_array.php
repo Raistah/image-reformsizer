@@ -41,7 +41,7 @@ if (!function_exists('irfs_get_array')) {
 		$url_start_string = " -u " . IRFS_URL_START;
 
 		$result = irfs_exec_and_handle(
-			IRFS_PLUGIN_ROOT . "/bin/image-resizer -w " .
+			IRFS_BIN_HANDLE . " -w " .
 				IRFS_WORKING_DIR .
 				" to-vec " .
 				$image .

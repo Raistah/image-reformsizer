@@ -24,6 +24,9 @@ if (!defined("IRFS_PLUGIN_ROOT_REL")) {
 
 require_once __DIR__ . "/functions/mod.php";
 require_once __DIR__ . "/api/mod.php";
+if (file_exists(__DIR__ . "/bin_handle.php")) {
+    include __DIR__ . "/bin_handle.php";
+}
 
 if (!defined("IRFS_URL_START")) {
 	define("IRFS_URL_START", "/wp-content/plugins/image-reformsizer");
@@ -39,37 +42,39 @@ function activate_image_reformsizer()
 {
 	$system_name = php_uname("s");
 	$system = $system_name . "_" . php_uname("m");
+	$bin_handle = "";
 
 	switch (true) {
 		case "FreeBSD_x86_64" == $system:
-			irfs_copy_bin(__DIR__ . "/bin/image-resizer-FreeBSD-x86_64", __DIR__ . "/bin/image-resizer");
-			irfs_exec_and_handle("chmod u+x " . __DIR__ . "/bin/image-resizer");
+			$bin_handle = __DIR__ . "/bin/image-resizer-FreeBSD-x86_64";
+			irfs_exec_and_handle("chmod u+x " . $bin_handle);
 			break;
 		case "Linux_x86_64" == $system:
-			irfs_copy_bin(__DIR__ . "/bin/image-resizer-Linux-musl-x86_64", __DIR__ . "/bin/image-resizer");
-			irfs_exec_and_handle("chmod u+x " . __DIR__ . "/bin/image-resizer");
+			$bin_handle = __DIR__ . "/bin/image-resizer-Linux-musl-x86_64";
+			irfs_exec_and_handle("chmod u+x " . $bin_handle);
 			break;
 		case "Linux_aarch64" == $system:
-			irfs_copy_bin(__DIR__ . "/bin/image-resizer-Linux-musl-arm64", __DIR__ . "/bin/image-resizer");
-			irfs_exec_and_handle("chmod u+x " . __DIR__ . "/bin/image-resizer");
+			$bin_handle = __DIR__ . "/bin/image-resizer-Linux-musl-arm64";
+			irfs_exec_and_handle("chmod u+x " . $bin_handle);
 			break;
-		case "Windows" == $system_name:
-			irfs_copy_bin(__DIR__ . "/bin/image-resizer-Windows-msvc-x86_64", __DIR__ . "/bin/image-resizer");
+		case  str_contains($system_name, "Windows"):
+			$bin_handle = __DIR__ . "/bin/image-resizer-Windows-msvc-x86_64.exe";
 			break;
 		case "Darwin_x86_64" == $system:
-			irfs_copy_bin(__DIR__ . "/bin/image-resizer-macOS-x86_64", __DIR__ . "/bin/image-resizer");
-			irfs_exec_and_handle("chmod u+x " . __DIR__ . "/bin/image-resizer");
+			$bin_handle = __DIR__ . "/bin/image-resizer-macOS-x86_64";
+			irfs_exec_and_handle("chmod u+x " . $bin_handle);
 			break;
 		case "Darwin_arm64" == $system:
-			irfs_copy_bin(__DIR__ . "/bin/image-resizer-macOS-arm64", __DIR__ . "/bin/image-resizer");
-			irfs_exec_and_handle("chmod u+x " . __DIR__ . "/bin/image-resizer");
+			$bin_handle = __DIR__ . "/bin/image-resizer-macOS-arm64";
+			irfs_exec_and_handle("chmod u+x " . $bin_handle);
 			break;
 		default:
 			wp_die("Image Reformsizer (Error: `your system not supported yet ($system). Please contact me here: <a href=\"https://github.com/Raistah/image-reformsizer\">https://github.com/Raistah/image-reformsizer</a>`)\n");
 			break;
 	}
+	irfs_create_bin_handle($bin_handle);
 
-	irfs_exec_and_handle(__DIR__ . "/bin/image-resizer -w " . __DIR__ . "/ install");
+	irfs_exec_and_handle($bin_handle . " -w " . __DIR__ . "/ install");
 }
 
 function irfs_copy_bin(string $source, string $dist): void
@@ -81,6 +86,20 @@ function irfs_copy_bin(string $source, string $dist): void
 		}
 	} else {
 		wp_die("Image Reformsizer (Error: `Source file does not exist. $source`)\n");
+	}
+}
+
+function irfs_create_bin_handle(string $source): void
+{
+	$file_name = "bin_handle.php";
+	$content = <<<EOT
+	<?php
+	if (!defined("IRFS_BIN_HANDLE")) {
+		define("IRFS_BIN_HANDLE", "$source");
+	}
+	EOT;
+	if (file_put_contents(IRFS_PLUGIN_ROOT . "/" . $file_name, $content) == false) {
+		wp_die("Image Reformsizer (Error: `cannot create file '$file_name'. Check permissions.`)\n");
 	}
 }
 

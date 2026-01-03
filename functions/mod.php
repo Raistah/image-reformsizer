@@ -36,7 +36,7 @@ if (! function_exists('irfs_clear_cache')) {
 			}
 		}
 
-		irfs_exec_and_handle(IRFS_PLUGIN_ROOT . "/bin/image-resizer -w " . IRFS_WORKING_DIR . " install");
+		irfs_exec_and_handle(IRFS_BIN_HANDLE . " -w " . IRFS_WORKING_DIR . " install");
 	}
 }
 

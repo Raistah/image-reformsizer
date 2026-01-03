@@ -62,7 +62,7 @@ if (!function_exists('irfs_get_html')) {
 		$extra_atts_string = $extra_atts != null ? " -e '" . str_replace('"', '', $extra_atts) . "'" : "";
 
 		return irfs_exec_and_handle(
-			IRFS_PLUGIN_ROOT . "/bin/image-resizer -w " .
+			IRFS_BIN_HANDLE . " -w " .
 				IRFS_WORKING_DIR .
 				" to-html " .
 				$image .
