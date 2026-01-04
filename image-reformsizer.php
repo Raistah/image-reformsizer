@@ -25,7 +25,7 @@ if (!defined("IRFS_PLUGIN_ROOT_REL")) {
 require_once __DIR__ . "/functions/mod.php";
 require_once __DIR__ . "/api/mod.php";
 if (file_exists(__DIR__ . "/bin_handle.php")) {
-    include __DIR__ . "/bin_handle.php";
+	include __DIR__ . "/bin_handle.php";
 }
 
 if (!defined("IRFS_URL_START")) {
@@ -77,25 +77,14 @@ function activate_image_reformsizer()
 	irfs_exec_and_handle($bin_handle . " -w " . __DIR__ . "/ install");
 }
 
-function irfs_copy_bin(string $source, string $dist): void
-{
-	if (file_exists($source)) {
-		if (!copy($source, $dist)) {
-			wp_die("Image Reformsizer (Error: `Failed to copy the file($source to $dist).`)\n");
-			echo "Error: Failed to copy the file.";
-		}
-	} else {
-		wp_die("Image Reformsizer (Error: `Source file does not exist. $source`)\n");
-	}
-}
-
 function irfs_create_bin_handle(string $source): void
 {
+	$source_enc = str_replace('\\', '\\\\', $source);
 	$file_name = "bin_handle.php";
 	$content = <<<EOT
 	<?php
 	if (!defined("IRFS_BIN_HANDLE")) {
-		define("IRFS_BIN_HANDLE", "$source");
+		define("IRFS_BIN_HANDLE", "$source_enc");
 	}
 	EOT;
 	if (file_put_contents(IRFS_PLUGIN_ROOT . "/" . $file_name, $content) == false) {
