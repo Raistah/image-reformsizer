@@ -7,9 +7,11 @@ import "./editor.scss";
 import { useEffect } from 'react';
 
 export default function Edit({ attributes, setAttributes }) {
+	const avaliableFormats = ["png", "webp", "avif", "jpeg"];
 
 	useEffect(() => {
 		const handler = setTimeout(() => {
+
 			if (attributes.imageId != null) {
 				fetch(`${window.wpApiSettings.root}image-reformsizer/api/get-html/`, {
 					method: 'POST',
@@ -36,15 +38,45 @@ export default function Edit({ attributes, setAttributes }) {
 
 	useEffect(() => {
 		if (attributes.formats.length == 0) {
-			attributes.formats.push('png');
-			setAttributes({ primaryFormat: 'png' });
+			let formats = ['png', ...attributes.formats];
+			setAttributes({ primaryFormat: 'png', formats: formats });
 		} else {
 			if (!attributes.formats.includes(attributes.primaryFormat)) {
 				setAttributes({ primaryFormat: attributes.formats[0] });
 				return;
 			}
 		}
-	}, [attributes.formats])
+
+		let indexOfPrimary = attributes.formats.indexOf(attributes.primaryFormat);
+		if (indexOfPrimary > 0) {
+			let formats = attributes.formats.filter(format => {
+				return format != attributes.primaryFormat;
+			});
+			setAttributes({ formats: [attributes.primaryFormat, ...formats] });
+		}
+	}, [attributes.formats, attributes.primaryFormat]);
+
+	function updateTargets() {
+		let targets = [...attributes.targets];
+		targets.map((target) => {
+			switch (target.mediaType) {
+				case "min":
+					target.media = "(min-width:" + target.mediaValue + "px)";
+					break;
+				case "max":
+					target.media = "(max-width:" + target.mediaValue + "px)";
+					break;
+				case "custom":
+					target.media = target.mediaValue;
+					break;
+			}
+			return target;
+		});
+
+		setAttributes({ targets: targets });
+		console.log(targets);
+	}
+
 	return (
 		<div {...useBlockProps()}>
 			<Placeholder
@@ -102,7 +134,7 @@ export default function Edit({ attributes, setAttributes }) {
 						<div class="formats-col">
 							<div class="formats">
 								<legend class="label">Active formats</legend>
-								{['png', 'webp', 'jpeg', 'avif'].map((format) => (
+								{avaliableFormats.map((format) => (
 									<div class="format">
 										<CheckboxControl
 											label={format}
@@ -126,7 +158,9 @@ export default function Edit({ attributes, setAttributes }) {
 							<div class="primary-format">
 								<RadioControl
 									label="primary format"
-									options={attributes.formats.map(val => {
+									options={avaliableFormats.filter(val => {
+										return attributes.formats.includes(val);
+									}).map(val => {
 										return {
 											label: val,
 											value: val
@@ -166,18 +200,18 @@ export default function Edit({ attributes, setAttributes }) {
 											}}
 										/>
 										<TextControl
-											label="heigth"
+											label="height"
 											type="number"
-											value={attributes.targets[index].heigth}
+											value={attributes.targets[index].height}
 											onChange={(val) => {
 												let newArray = [...attributes.targets];
-												newArray[index].heigth = val;
+												newArray[index].height = val;
 												setAttributes({ targets: newArray });
 											}}
 										/>
 										<SelectControl
 											label="Vertical align"
-											value={attributes.targets[index].vAlign}
+											value={attributes.targets[index].v_align}
 											options={[
 												{
 													label: 'Start',
@@ -194,13 +228,13 @@ export default function Edit({ attributes, setAttributes }) {
 											]}
 											onChange={(val) => {
 												let newArray = [...attributes.targets];
-												newArray[index].vAlign = val;
+												newArray[index].v_align = val;
 												setAttributes({ targets: newArray });
 											}}
 										/>
 										<SelectControl
 											label="Horizontal align"
-											value={attributes.targets[index].hAlign}
+											value={attributes.targets[index].h_align}
 											options={[
 												{
 													label: 'Start',
@@ -217,7 +251,7 @@ export default function Edit({ attributes, setAttributes }) {
 											]}
 											onChange={(val) => {
 												let newArray = [...attributes.targets];
-												newArray[index].hAlign = val;
+												newArray[index].h_align = val;
 												setAttributes({ targets: newArray });
 											}}
 										/>
@@ -244,16 +278,18 @@ export default function Edit({ attributes, setAttributes }) {
 														let newArray = [...attributes.targets];
 														newArray[index].mediaType = val;
 														setAttributes({ targets: newArray });
+														updateTargets();
 													}}
 												/>
 												<TextControl
 													label="Media query"
 													type={attributes.targets[index].mediaType == 'custom' ? "text" : "number"}
-													value={attributes.targets[index].media}
+													value={attributes.targets[index].mediaValue}
 													onChange={(val) => {
 														let newArray = [...attributes.targets];
-														newArray[index].media = val;
+														newArray[index].mediaValue = val;
 														setAttributes({ targets: newArray });
+														updateTargets();
 													}}
 												/>
 											</>
@@ -267,9 +303,9 @@ export default function Edit({ attributes, setAttributes }) {
 									let newArray = [...attributes.targets];
 									newArray.push({
 										width: 1,
-										heigth: 1,
-										hAlign: 'c',
-										vAlign: 'c',
+										height: 1,
+										h_align: 'c',
+										v_align: 'c',
 										mediaType: 'min',
 										media: '',
 									});
@@ -309,7 +345,7 @@ export default function Edit({ attributes, setAttributes }) {
 						/>
 					</div>
 				</InspectorAdvancedControls>
-				<div class="preview" dangerouslySetInnerHTML={{__html: attributes.tag}}/>
+				<div class="preview" dangerouslySetInnerHTML={{ __html: attributes.tag }} />
 			</Placeholder>
 		</div>
 	);

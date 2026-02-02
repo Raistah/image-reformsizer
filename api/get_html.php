@@ -25,24 +25,10 @@ if (!function_exists('irfs_api_get_html')) {
 		$prep_targets = [];
 		foreach ($targets as $index => $target) {
 			if ($index == 0) {
-				$prep_targets[] = $target->width . "," . $target->heigth . "," . $target->vAlign . "," . $target->hAlign;
+				$prep_targets[] = $target->width . "," . $target->height . "," . $target->v_align . "," . $target->h_align;
 				continue;
 			}
-			$prep_target = $target->width . "," . $target->heigth . "," . $target->vAlign . "," . $target->hAlign;
-
-			switch ($target->mediaType) {
-				case "min":
-					$prep_target .= ",(min-width:" . $target->media . "px)";
-					break;
-				case "max":
-					$prep_target .= ",(max-width:" . $target->media . "px)";
-					break;
-				case "custom":
-					$prep_target .= "," . $target->media;
-					break;
-			}
-
-			$prep_targets[] = $prep_target;
+			$prep_targets[] = $target->width . "," . $target->height . "," . $target->v_align . "," . $target->h_align . "," . $target->media;
 		}
 
 		return $prep_targets;

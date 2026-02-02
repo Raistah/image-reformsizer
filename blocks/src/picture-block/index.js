@@ -43,9 +43,9 @@ registerBlockType( metadata.name, {
 			type: "array",
 			default: [{
 				width: 200,
-				heigth: 200,
-				vAlign: 'c',
-				hAlign: 'c',
+				height: 200,
+				v_align: 'c',
+				h_align: 'c',
 			}],
 		},
 		id: {
