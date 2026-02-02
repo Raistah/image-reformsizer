@@ -1,0 +1,38 @@
+name: release_build
+
+on:
+  push:
+    tags:
+      - 'v-*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install NPM dependencies
+        run: npm install && cd blocks && npm install
+
+      - name: Build Assets
+        run: npm run build && cd blocks && npm run build
+
+      - name: Create Zip Archive
+        run: |
+          # Replace 'image-reformsizer' with your actual plugin folder name
+          zip -r image-reformsizer.zip . -x "*.git*" ".github*" "*node_modules*" "tests*" ".editorconfig"
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: image-reformsizer.zip
