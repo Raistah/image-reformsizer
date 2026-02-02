@@ -1,6 +1,4 @@
 <?php
-var_dump($attributes);
-
 echo irfs_get_html(
 	$attributes["imageId"],
 	isset($attributes["formats"]) ? $attributes["formats"] : ["png"],
