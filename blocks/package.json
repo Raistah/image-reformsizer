@@ -17,8 +17,7 @@
 	"dependencies": {
 		"@wordpress/block-editor": "latest",
 		"@wordpress/blocks": "latest",
-		"@wordpress/i18n": "latest",
-		"html-react-parser": "^5.2.11"
+		"@wordpress/i18n": "latest"
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^31.2.0"
